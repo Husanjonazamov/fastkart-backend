@@ -22,7 +22,7 @@ class CategoryModel(AbstractBaseModel):
     type = models.CharField(max_length=100, choices=TYPE_CHOICES.choices)
     commission_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
-    created_by = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    created_by = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
