@@ -24,7 +24,7 @@ class TransactionModel(AbstractBaseModel):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return self.amount
 
     @classmethod
     def _create_fake(self):
