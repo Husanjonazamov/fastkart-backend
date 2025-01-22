@@ -1,14 +1,12 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 
-from ..models import TagsModel
+from ..models import CountryModel
 
 
-@admin.register(TagsModel)
-class TagsAdmin(ModelAdmin):
+@admin.register(CountryModel)
+class CountryAdmin(ModelAdmin):
     list_display = (
         "id",
         "__str__",
     )
-
-
