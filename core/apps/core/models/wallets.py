@@ -8,7 +8,7 @@ class WalletType(models.TextChoices):
     vendor = "vendor", "Vendor"
 
 
-class WalletModel(AbstractBaseModel):
+class WalletsModel(AbstractBaseModel):
     type = models.CharField(max_length=255, choices=WalletType.choices, default="consumer")
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 

@@ -5,7 +5,7 @@ from django_core.models import AbstractBaseModel
 
 class TransactionModel(AbstractBaseModel):
     wallet = models.ForeignKey(
-        "core.WalletModel",
+        "core.WalletsModel",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

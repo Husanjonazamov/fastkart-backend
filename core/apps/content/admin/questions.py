@@ -1,11 +1,11 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin
 
-from ..models import QuestionModel
+from ..models import QuestionsModel
 
 
-@admin.register(QuestionModel)
-class QuestionAdmin(ModelAdmin):
+@admin.register(QuestionsModel)
+class QuestionsAdmin(ModelAdmin):
     list_display = (
         "id",
         "__str__",

@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 from django_core.models import AbstractBaseModel
 
 
-class QuestionModel(AbstractBaseModel):
+class QuestionsModel(AbstractBaseModel):
     question = models.CharField(max_length=255)
     answer = models.TextField()
     consumer = models.ForeignKey('accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name='questions')
