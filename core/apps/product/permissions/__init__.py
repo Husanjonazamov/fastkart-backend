@@ -5,3 +5,4 @@ from .product import *  # noqa
 from .review import *  # noqa
 from .store import *  # noqa
 from .tags import *  # noqa
+from .variation import *  # noqa
