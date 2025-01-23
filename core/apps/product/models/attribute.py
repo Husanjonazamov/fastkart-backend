@@ -5,7 +5,6 @@ from django_core.models import AbstractBaseModel
 
 class AttributeModel(AbstractBaseModel):
     name = models.CharField(_("name"), max_length=255)
-    attribute_value = models.ManyToManyField('AttributevalueModel', null=True, blank=True)
     style = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
     status = models.BooleanField(default=True)
@@ -33,6 +32,7 @@ class AttributeModel(AbstractBaseModel):
 
 class AttributevalueModel(AbstractBaseModel):
     value = models.CharField(max_length=100)
+    attribute = models.ForeignKey(AttributeModel, on_delete=models.CASCADE, related_name=("attribute_values"))
     slug = models.SlugField(max_length=100, unique=True)
     hex_color = models.CharField(max_length=10, null=True, blank=True)
     created_by = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
