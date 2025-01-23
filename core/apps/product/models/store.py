@@ -58,14 +58,14 @@ class StoreModel(AbstractBaseModel):
         related_name="stores",
     )
     country = models.ForeignKey(
-        "core.CountryModel",
+        "address.CountryModel",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="stores",
     )
     state = models.ForeignKey(
-        "core.StateModel",
+        "address.StateModel",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

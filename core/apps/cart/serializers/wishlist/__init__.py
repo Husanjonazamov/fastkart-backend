@@ -1,0 +1,1 @@
+from .wishlist import *  # noqa

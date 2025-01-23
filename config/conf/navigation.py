@@ -3,7 +3,7 @@ from django.utils.translation import gettext_lazy as _
 
 PAGES = [
     {
-        "seperator": False,
+        "seperator": True,
         "items": [
             {
                 "title": _("Home page"),

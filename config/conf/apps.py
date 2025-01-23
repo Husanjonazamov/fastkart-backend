@@ -22,6 +22,7 @@ APPS = [
     'core.apps.orders',
     'core.apps.payments',
     'core.apps.product',
+    'core.apps.address',
 ]
 
 if env.str("PROJECT_ENV") == "debug":

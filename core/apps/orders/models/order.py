@@ -116,14 +116,14 @@ class OrderModel(AbstractBaseModel):
     )
     products = models.ManyToManyField("product.ProductModel")
     billing_address = models.ForeignKey(
-        "orders.AddressModel",
+        "address.AddressModel",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name="order_billings",
     )
     shipping_address = models.ForeignKey(
-        "orders.AddressModel",
+        "address.AddressModel",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
