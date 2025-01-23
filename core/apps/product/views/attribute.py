@@ -3,7 +3,7 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from ..models import AttributeModel, AttributevalueModel
 from ..serializers.attribute import (
@@ -12,12 +12,12 @@ from ..serializers.attribute import (
     ListAttributeSerializer,
     ListAttributevalueSerializer,
     RetrieveAttributeSerializer,
-    RetrieveAttributevalueSerializer,
+    RetrieveAttributevalueSerializer,   
 )
 
 
 @extend_schema(tags=["attribute"])
-class AttributeView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class AttributeView(BaseViewSetMixin, ModelViewSet):
     queryset = AttributeModel.objects.all()
 
     def get_serializer_class(self) -> Any:
