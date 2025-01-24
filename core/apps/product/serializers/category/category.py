@@ -8,8 +8,7 @@ class BaseCategorySerializer(serializers.ModelSerializer):
     category_image = ListImageSerializer()
     category_icon = ListImageSerializer()
     subcategories = serializers.SerializerMethodField()
-    
-    
+
     class Meta:
         model = CategoryModel
         fields = [
@@ -28,7 +27,6 @@ class BaseCategorySerializer(serializers.ModelSerializer):
             "subcategories",
         ]
 
-
     def get_created_by_id(self, obj):
         return obj.created_by.id if obj.created_by else None
 
@@ -42,13 +40,11 @@ class BaseCategorySerializer(serializers.ModelSerializer):
         return obj.parent.id if obj.parent else None
 
     def get_subcategories(self, obj):
-        subcategories = obj.subcategories.all()
+        subcategories = obj.children.exclude(id=obj.pk)
         if subcategories.exists():
-            print('category list')
             return ListCategorySerializer(subcategories, many=True).data
         return None
-    
-    
+
 
 class ListCategorySerializer(BaseCategorySerializer):
     class Meta(BaseCategorySerializer.Meta): ...
