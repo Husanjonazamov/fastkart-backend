@@ -15,12 +15,24 @@ PAGES = [
     {
         "title": _("Auth"),
         "separator": True,
+        "collapsible": True,
         "items": [
             {
                 "title": _("Users"),
                 "icon": "group",  # Google Material Icons Group (Users) icon
                 "link": reverse_lazy("admin:accounts_user_changelist"),
             },
+            {
+                "title": _("Role"),
+                "icon": "group",  # Google Material Icons Group (Users) icon
+                "link": reverse_lazy("admin:accounts_role_changelist"),
+            },
+            {
+                "title": _("Pivot"),
+                "icon": "swap_horiz",  # Google Material Icons Group (Users) icon
+                "link": reverse_lazy("admin:accounts_pivot_changelist"),
+            },
+
         ],
     },
     {

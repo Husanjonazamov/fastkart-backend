@@ -19,6 +19,7 @@ class TagsModel(AbstractBaseModel):
     slug = models.CharField(max_length=255)
     type = models.CharField(max_length=100, choices=TYPE_CHOICES.choices)
     descriptions = models.TextField()
+    status = models.BooleanField(default=True)
     created_by = models.ForeignKey("accounts.User", on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(auto_now=True)

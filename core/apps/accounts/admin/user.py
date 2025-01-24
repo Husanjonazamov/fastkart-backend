@@ -5,7 +5,7 @@
 # from unfold.forms import UserChangeForm
 from django.contrib import admin
 from django.contrib.auth.models import Group
-from core.apps.accounts.models.user import User
+from core.apps.accounts.models.user import User, Role, Pivot
 from unfold.admin import ModelAdmin as UnfoldModelAdmin
 
 admin.site.unregister(Group)
@@ -14,9 +14,26 @@ admin.site.unregister(Group)
 @admin.register(User)
 class UserAdmin(UnfoldModelAdmin):
     list_display = (
-        "name",
+        "id",
         "username",
         "phone",
+        "role",
+    )
+    
+    
+@admin.register(Role)
+class RoleAdmin(UnfoldModelAdmin):
+    list_display = (
+        "id",
+        "guard_name",
+    )
+    
+    
+    
+@admin.register(Pivot)
+class PivotAdmin(UnfoldModelAdmin):
+    list_display = (
+        "id",
         "role",
     )
 
