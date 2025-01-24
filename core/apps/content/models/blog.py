@@ -42,7 +42,7 @@ class BlogModel(AbstractBaseModel):
     
     
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
+        self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
     @classmethod

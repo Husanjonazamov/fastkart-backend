@@ -36,7 +36,7 @@ class RetrieveAttributeSerializer(BaseAttributeSerializer):
 
 
 class CreateAttributeSerializer(BaseAttributeSerializer):
-    created_by_id = serializers.SerializerMethodField()
+    created_by_id = serializers.IntegerField(source="created_by.id", read_only=True)
 
     class Meta(BaseAttributeSerializer.Meta):
         fields = [

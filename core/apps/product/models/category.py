@@ -13,21 +13,51 @@ class TYPE_CHOICES(models.TextChoices):
 
 
 class CategoryModel(AbstractBaseModel):
-    name = models.CharField(_("name"), max_length=255)
-    slug = models.SlugField(unique=True)
-    descriptions = models.TextField()
-    category_image = models.ImageField(upload_to='category_image/', null=True, blank=True)
-    category_icon = models.ImageField(upload_to='category_icon', null=True, blank=True)
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
+    description = models.TextField()
     status = models.BooleanField(default=True)
-    type = models.CharField(max_length=100, choices=TYPE_CHOICES.choices)
-    commission_rate = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
-    parent = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
-    created_by = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
+    type = models.CharField(max_length=50, choices=TYPE_CHOICES.choices)
+    commission_rate = models.DecimalField(
+        max_digits=5, decimal_places=2, null=True, blank=True
+    )
+    created_by = models.ForeignKey(
+        "accounts.User",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="categories",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
     blogs_count = models.IntegerField(default=0)
     products_count = models.IntegerField(default=0)
+    category_image = models.ForeignKey(
+        "content.ImageModel",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="category_images",
+    )
+    category_icon = models.ForeignKey(
+        "content.ImageModel",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="category_icons",
+    )
+    subcategories = models.ManyToManyField(
+        "CategoryModel", symmetrical=False, related_name="parent_category", blank=True
+    )
+    parent = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="children",
+    )
+
 
     def __str__(self):
         return self.name

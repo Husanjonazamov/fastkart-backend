@@ -5,25 +5,24 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from ..models import CategoryModel
-from ..serializers.category import CreateCategorySerializer, ListCategorySerializer, RetrieveCategorySerializer
+from ..models import ImageModel
+from ..serializers.image import CreateImageSerializer, ListImageSerializer, RetrieveImageSerializer
 
 
-
-@extend_schema(tags=["category"])
-class CategoryView(BaseViewSetMixin, ReadOnlyModelViewSet):
-    queryset = CategoryModel.objects.all()
+@extend_schema(tags=["Image"])
+class ImageView(BaseViewSetMixin, ReadOnlyModelViewSet):
+    queryset = ImageModel.objects.all()
 
     def get_serializer_class(self) -> Any:
         match self.action:
             case "list":
-                return ListCategorySerializer
+                return ListImageSerializer
             case "retrieve":
-                return RetrieveCategorySerializer
+                return RetrieveImageSerializer
             case "create":
-                return CreateCategorySerializer
+                return CreateImageSerializer
             case _:
-                return ListCategorySerializer
+                return ListImageSerializer
 
     def get_permissions(self) -> Any:
         perms = []

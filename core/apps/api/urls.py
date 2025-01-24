@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 # views
 from core.apps.address.views import AddressView, CountryView, StateView
 from core.apps.cart.views import CartView, CouponView, WishlistView, PointsView
-from core.apps.content.views import BlogView, FaqView, NotificationView, QuestionsView
+from core.apps.content.views import BlogView, FaqView, NotificationView, QuestionsView, ImageView
 from core.apps.core.views import TransactionView, WalletsView
 from core.apps.orders.views import OrderstatusView, OrderView, RefundView
 from core.apps.payments.views import CurrencyView, PaymentaccountView
@@ -38,6 +38,8 @@ router.register(r'blog', BlogView, basename='blog')
 router.register(r'faq', FaqView, basename='faq')
 router.register(r'notification', NotificationView, basename='notification')
 router.register(r'questions', QuestionsView, basename='questions')
+router.register(r'image', ImageView, basename='image')
+
 
 # core views
 router.register(r'transaction', TransactionView, basename='transaction')
