@@ -5,9 +5,22 @@
 # from unfold.forms import UserChangeForm
 from django.contrib import admin
 from django.contrib.auth.models import Group
-
+from core.apps.accounts.models.user import User
+from unfold.admin import ModelAdmin as UnfoldModelAdmin
 
 admin.site.unregister(Group)
+
+
+@admin.register(User)
+class UserAdmin(UnfoldModelAdmin):
+    list_display = (
+        "name",
+        "username",
+        "phone",
+        "role",
+    )
+
+
 
 # class CustomUserAdmin(admin.UserAdmin, ModelAdmin):
 #     change_password_form = AdminPasswordChangeForm
