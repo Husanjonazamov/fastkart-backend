@@ -3,19 +3,19 @@ from rest_framework import serializers
 from ...models import BlogModel
 from core.apps.accounts.serializers import UserSerializer
 from core.apps.content.serializers.image import ListImageSerializer
-# from core.apps.product.serializers.category import ListCategorySerializer
+from core.apps.product.serializers.category import ListCategorySerializer
 from core.apps.product.serializers.tags import ListTagsSerializer
 
 
 class BaseBlogSerializer(serializers.ModelSerializer):
-    # created_by = UserSerializer(read_only=True)
+    created_by = UserSerializer(read_only=True)
     created_by_id = serializers.IntegerField(source="created_by.id", read_only=True)
     blog_thumbnail_id = serializers.SerializerMethodField()
-    # blog_thumbnail = ListImageSerializer(read_only=True)
+    blog_thumbnail = ListImageSerializer(read_only=True)
     blog_meta_image_id = serializers.SerializerMethodField()
-    # blog_meta_image = ListImageSerializer(read_only=True)
-    # tags = ListTagsSerializer(many=True, read_only=True)
-    # categories = ListCategorySerializer(many=True, read_only=True)
+    blog_meta_image = ListImageSerializer(read_only=True)
+    tags = ListTagsSerializer(many=True, read_only=True)
+    categories = ListCategorySerializer(many=True, read_only=True)
     
     class Meta:
         model = BlogModel
