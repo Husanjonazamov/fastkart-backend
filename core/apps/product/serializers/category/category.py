@@ -13,7 +13,7 @@ class BaseCategorySerializer(serializers.ModelSerializer):
         model = CategoryModel
         fields = [
             "id",
-            "name", 
+            "name",
             "description",
             "status",
             "type",
