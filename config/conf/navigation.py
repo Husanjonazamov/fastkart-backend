@@ -110,6 +110,11 @@ PAGES = [
                 "link": reverse_lazy("admin:content_notificationmodel_changelist"),
             },
             {
+                "title": _("Notification Data"),
+                "icon": "notifications",  # Google Material Icons Notifications icon
+                "link": reverse_lazy("admin:content_notificationdatamodel_changelist"),
+            },
+            {
                 "title": _("Questions"),
                 "icon": "help",  # Google Material Icons Help icon
                 "link": reverse_lazy("admin:content_questionsmodel_changelist"),
