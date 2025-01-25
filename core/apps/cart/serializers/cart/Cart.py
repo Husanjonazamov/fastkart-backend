@@ -15,11 +15,27 @@ class BaseCartSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartModel
-        exclude = [
+        fields = [
+            "id",
+            "product_id",
+            "variation_id",
+            "consumer_id",
+            "quantity",
+            "sub_total",
             "created_at",
             "updated_at",
+            "deleted_at",
+            "product",
+            "variations",
         ]
-
+        read_only_fields = [
+            "id",
+            "created_at",
+            "updated_at",
+            "deleted_at",
+            "sub_total",
+        ]
+        
     def get_product_id(self, obj: CartModel) -> int | None:
         return obj.product.id if obj.product else None
 
@@ -39,6 +55,9 @@ class ListCartSerializer(BaseCartSerializer):
             "consumer_id",
             "quantity",
             "sub_total",
+            "created_at",
+            "updated_at",
+            "deleted_at",
             "product",
             "variation",
         ]
@@ -59,7 +78,6 @@ class RetrieveCartSerializer(BaseCartSerializer):
             "product",
             "variation",
         ]
-
 
 class CreateCartSerializer(BaseCartSerializer):
     product_id = serializers.IntegerField()

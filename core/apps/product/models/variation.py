@@ -17,7 +17,7 @@ class VariationModel(AbstractBaseModel):
     deleted_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    variation_image = models.ImageField(upload_to='variations/', null=True, blank=True)
+    variation_image = models.ForeignKey('content.ImageModel', on_delete=models.SET_NULL, null=True, blank=True)
     attribute_values = models.ManyToManyField('product.AttributevalueModel', related_name='variations')
 
     def __str__(self):
