@@ -155,7 +155,7 @@ PAGES = [
             },
             {
                 "title": _("Refund"),
-                "icon": "refund",  # Google Material Icons Refund icon
+                "icon": "list_alt",  # Google Material Icons Refund icon
                 "link": reverse_lazy("admin:orders_refundmodel_changelist"),
             },
         ],
