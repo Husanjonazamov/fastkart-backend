@@ -6,12 +6,14 @@ from ...models import StateModel
 class BaseStateSerializer(serializers.ModelSerializer):
     class Meta:
         model = StateModel
-        exclude = [
-            "created_at",
-            "updated_at",
+        fields = [
+            'id',
+            'name',
+            'country',
+            'created_at',
+            'updated_at',
         ]
-
-
+        
 class ListStateSerializer(BaseStateSerializer):
     class Meta(BaseStateSerializer.Meta): ...
 

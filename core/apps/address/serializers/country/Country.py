@@ -1,14 +1,24 @@
 from rest_framework import serializers
 
 from ...models import CountryModel
+from ..state.State import ListStateSerializer
 
 
 class BaseCountrySerializer(serializers.ModelSerializer):
+    states = ListStateSerializer(many=True)
+    
     class Meta:
         model = CountryModel
-        exclude = [
-            "created_at",
-            "updated_at",
+        fields = [
+            'id',
+            'name',
+            'currency',
+            'currency_symbol',
+            'iso_3166_2',
+            'iso_3166_3',
+            'calling_code',
+            'flag',
+            'states'
         ]
 
 
