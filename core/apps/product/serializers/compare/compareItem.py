@@ -1,14 +1,19 @@
 from rest_framework import serializers
 
 from ...models import CompareitemModel
+from core.apps.product.serializers.product import ListProductSerializer
+
 
 
 class BaseCompareitemSerializer(serializers.ModelSerializer):
+    product = ListProductSerializer()
     class Meta:
         model = CompareitemModel
-        exclude = [
+        fields = [
+            "product",
             "created_at",
             "updated_at",
+            "deleted_at",
         ]
 
 

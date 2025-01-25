@@ -11,6 +11,8 @@ from core.apps.payments.views import CurrencyView, PaymentaccountView
 from core.apps.product.views import (
     AttributeView,
     AttributevalueView,
+    CompareitemView,
+    CompareView,
     CategoryView,
     ProductView,
     ReviewView,
@@ -57,6 +59,8 @@ router.register(r'paymentaccount', PaymentaccountView, basename='paymentaccount'
 # product views
 router.register(r'attribute', AttributeView, basename='attribute')
 router.register(r'attribute_value', AttributevalueView, basename='attribute_value')
+router.register(r'compare', CompareView, basename='compare')
+router.register(r'compare_items', CompareitemView, basename='compare_items')
 router.register(r'category', CategoryView, basename='category')
 router.register(r'product', ProductView, basename='product')
 router.register(r'review', ReviewView, basename='review')

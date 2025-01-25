@@ -8,10 +8,10 @@ class CompareModel(AbstractBaseModel):
     total = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
 
     def __str__(self):
         return f'{self.consumer}\'s compare {self.total} products'
+
 
     @classmethod
     def _create_fake(self):
@@ -26,7 +26,7 @@ class CompareModel(AbstractBaseModel):
 
 
 class CompareitemModel(AbstractBaseModel):
-    compare = models.ForeignKey(CompareModel, on_delete=models.CASCADE, related_name="items")
+    compare = models.ForeignKey(CompareModel, on_delete=models.CASCADE, related_name="compare_items")
     product = models.ForeignKey(
         "product.ProductModel",
         on_delete=models.SET_NULL,
