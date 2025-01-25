@@ -4,7 +4,7 @@ from django_core.models import AbstractBaseModel
 
 
 class PointsModel(AbstractBaseModel):
-    user = models.OneToOneField("accounts.User", on_delete=models.CASCADE, related_name="point")
+    consumer = models.OneToOneField("accounts.User", on_delete=models.CASCADE, related_name="point")
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def __str__(self):

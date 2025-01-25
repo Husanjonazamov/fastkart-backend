@@ -1,14 +1,20 @@
 from rest_framework import serializers
 
 from ...models import PointsModel
+from core.apps.core.serializers.transaction import ListTransactionSerializer
 
 
 class BasePointsSerializer(serializers.ModelSerializer):
+    transactions = ListTransactionSerializer(many=True)
+    consumer_id = serializers.IntegerField()
+    balance = serializers.CharField()
     class Meta:
         model = PointsModel
-        exclude = [
-            "created_at",
-            "updated_at",
+        fields = [
+            'id',
+            'consumer_id',
+            'balance',
+            'transactions'
         ]
 
 
