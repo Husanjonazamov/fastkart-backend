@@ -4,36 +4,34 @@ from django_core.models import AbstractBaseModel
 
 
 
-class StokcStatusChoices(models.TextChoices):
-    IN_STOCK = 'in_stock', 'In Stock'
-    OUT_OF_STOCK = 'out_of_stock', 'Out of Stock'
-    ON_BACKORDER = 'on_backorder', 'In Backorder'
-
+class StockStatusChoices(models.TextChoices):
+    IN_STOCK = 'in_stock', _('In Stock')
+    OUT_OF_STOCK = 'out_of_stock', _('Out of Stock')
+    ON_BACKORDER = 'on_backorder', _('On Backorder')
 
 class ProductTypeChoices(models.TextChoices):
-    SIMPLE = "simple", "Dimple product"
-    VARIABLE = "variable", "Product with variations"
-    GROUPED = "grouped", "Collection of products"
-    EXTERNAL = "external", "External product"
-    AFFILIATE = "affiliate", "Affiliate product"
-    VIRTUAL = "virtual", "Virtual product"
-    DOWNLOADABLE = "downloadable", "Downloadable product"
+    SIMPLE = "simple", _("Simple product")
+    VARIABLE = "variable", _("Product with variations")
+    GROUPED = "grouped", _("Collection of products")
+    EXTERNAL = "external", _("External product")
+    AFFILIATE = "affiliate", _("Affiliate product")
+    VIRTUAL = "virtual", _("Virtual product")
+    DOWNLOADABLE = "downloadable", _("Downloadable product")
 
-
-
-class ProductModel(AbstractBaseModel):
-    name = models.CharField(_("name"), max_length=255)
+    
+class ProductModel(models.Model):
+    name = models.CharField(_("Name"), max_length=255)
     short_description = models.CharField(max_length=250)
     description = models.TextField()
     type = models.CharField(max_length=100, choices=ProductTypeChoices.choices)
     unit = models.CharField(max_length=100)
     weight = models.FloatField()
-    quantity = models.IntegerField()
+    quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     sale_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     discount = models.FloatField(null=True, blank=True)
     is_featured = models.BooleanField(default=False)
-    shipping_days = models.IntegerField(null=True, blank=True)
+    shipping_days = models.PositiveIntegerField(null=True, blank=True)
     is_cod = models.BooleanField(default=False)
     is_free_shipping = models.BooleanField(default=False)
     is_sale_enable = models.BooleanField(default=False)
@@ -43,12 +41,12 @@ class ProductModel(AbstractBaseModel):
     sale_starts_at = models.DateTimeField(null=True, blank=True)
     sale_expired_at = models.DateTimeField(null=True, blank=True)
     sku = models.CharField(max_length=255, unique=True)
-    is_random_related_products = models.BooleanField(default=False)   
+    is_random_related_products = models.BooleanField(default=False)
     stock_status = models.CharField(
         max_length=50,
-        choices=StokcStatusChoices.choices,
-        default=StokcStatusChoices.IN_STOCK,
-    )     
+        choices=StockStatusChoices.choices,
+        default=StockStatusChoices.IN_STOCK,
+    )
     meta_title = models.CharField(max_length=255, null=True, blank=True)
     meta_description = models.TextField(null=True, blank=True)
     product_thumbnail = models.ForeignKey(
@@ -88,15 +86,21 @@ class ProductModel(AbstractBaseModel):
         blank=True,
         related_name="products",
     )
-    created_by = models.ForeignKey('accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name="products")
+    created_by = models.ForeignKey(
+        'accounts.User', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name="products"
+    )
     tax = models.ForeignKey(
         'product.TaxModel', on_delete=models.SET_NULL, null=True, blank=True
     )
     deleted_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    orders_count = models.IntegerField(default=0)
-    reviews_count = models.IntegerField(default=0)
+    orders_count = models.PositiveIntegerField(default=0)
+    reviews_count = models.PositiveIntegerField(default=0)
     can_review = models.BooleanField(default=True)
     rating_count = models.FloatField(default=0.0)
     order_amount = models.FloatField(default=0.0)
@@ -121,13 +125,7 @@ class ProductModel(AbstractBaseModel):
             self.review_ratings = [0, 0, 0, 0, 0]
         super().save(*args, **kwargs)
 
-    @classmethod
-    def _create_fake(self):
-        return self.objects.create(
-            name="Test",
-        )
-
     class Meta:
-        db_table = "Product"
-        verbose_name = _("ProductModel")
-        verbose_name_plural = _("ProductModels")
+        db_table = "product"
+        verbose_name = _("Product")
+        verbose_name_plural = _("Products")

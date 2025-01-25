@@ -1,14 +1,14 @@
 from django.db import models
 from django_core.models import AbstractBaseModel
 from django.utils.translation import gettext_lazy as _
-from core.apps.product.models.product import StokcStatusChoices
+from core.apps.product.models.product import StockStatusChoices
 
 
 class VariationModel(AbstractBaseModel):
     name = models.CharField(_("name"), max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
-    stock_status = models.CharField(max_length=50, choices=StokcStatusChoices.choices)
+    stock_status = models.CharField(max_length=50, choices=StockStatusChoices.choices)
     sale_price = models.DecimalField(max_digits=10, decimal_places=2)
     discount = models.DecimalField(max_digits=5, decimal_places=2)
     sku = models.CharField(max_length=50)

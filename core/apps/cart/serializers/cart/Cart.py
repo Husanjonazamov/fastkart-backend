@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from core.apps.accounts.models import User
-from core.apps.product.serializers import ListProductSerializer, ListVariationSerializer
+from core.apps.product.serializers.product import ListProductSerializer
+from core.apps.product.serializers.variation import ListVariationSerializer
 from core.apps.product.models import ProductModel, VariationModel
 from core.apps.cart.models import CartModel
 

@@ -3,8 +3,8 @@ from rest_framework import serializers
 from ...models import BlogModel
 from core.apps.accounts.serializers import UserSerializer
 from core.apps.content.serializers.image import ListImageSerializer
-from core.apps.product.serializers.category import ListCategorySerializer
 from core.apps.product.serializers.tags import ListTagsSerializer
+from core.apps.product.serializers.category import ListCategorySerializer
 
 
 class BaseBlogSerializer(serializers.ModelSerializer):
