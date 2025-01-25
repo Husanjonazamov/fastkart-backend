@@ -111,7 +111,7 @@ class ProductModel(models.Model):
     cross_sell_products = models.ManyToManyField(
         "self", symmetrical=False, blank=True, related_name="cross_sells"
     )
-    product_galleries = models.ManyToManyField("content.ImageModel", blank=True, related_name="products")
+    product_galleries = models.ManyToManyField("content.ImageModel", blank=True, related_name="product_galleries")
     categories = models.ManyToManyField("product.CategoryModel", blank=True, related_name="products")
     tags = models.ManyToManyField("product.TagsModel", blank=True, related_name="products")
     attributes = models.ManyToManyField("product.AttributeModel", blank=True, related_name="products")
