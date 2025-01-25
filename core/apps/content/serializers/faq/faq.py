@@ -4,12 +4,23 @@ from ...models import FaqModel
 
 
 class BaseFaqSerializer(serializers.ModelSerializer):
+    status = serializers.SerializerMethodField()
+    
     class Meta:
         model = FaqModel
-        exclude = [
+        fields = [
+            "id",
+            "title",
+            "description",
+            "created_by_id",
+            "status", 
             "created_at",
             "updated_at",
+            "deleted_at",
         ]
+    
+    def get_status(self, obj):
+        return 1 if obj.status else 0
 
 
 class ListFaqSerializer(BaseFaqSerializer):
