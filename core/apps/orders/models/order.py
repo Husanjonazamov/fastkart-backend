@@ -88,7 +88,7 @@ class OrderModel(AbstractBaseModel):
         related_name="orders",
     )
     parent = models.ForeignKey(
-        "self",
+        "OrderModel",
         on_delete=models.SET_NULL,
         related_name="sub_orders",
         null=True,
