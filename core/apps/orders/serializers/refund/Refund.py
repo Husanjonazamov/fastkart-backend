@@ -20,7 +20,7 @@ class BaseRefundSerializer(serializers.ModelSerializer):
     store = ListStoreSerializer(required=False)
     order = ListOrderSerializer(required=False)
     refund_image = ListImageSerializer(required=False)
-    
+    amount = serializers.FloatField()
     
     class Meta: 
         model = RefundModel
@@ -53,6 +53,13 @@ class BaseRefundSerializer(serializers.ModelSerializer):
             "updated_at",
             "deleted_at",
         ]
+        
+        
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        if "is_used" in data:
+            data["is_used"] = "1" if instance.is_used else "0"
+        return data
 
 
 class ListRefundSerializer(BaseRefundSerializer):
