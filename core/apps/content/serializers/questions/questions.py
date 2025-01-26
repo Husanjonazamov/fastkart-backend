@@ -6,9 +6,23 @@ from ...models import QuestionsModel
 class BaseQuestionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionsModel
-        exclude = [
+        fields = [
+            "id",
+            "question",
+            "answer",
+            "consumer_id",
+            "product_id",
             "created_at",
             "updated_at",
+            "deleted_at",
+            "reaction",
+            "total_likes",
+            "total_dislikes",
+        ]
+        read_only_fields = [
+            "id",
+            "created_at",
+            "updated_at"
         ]
 
 
