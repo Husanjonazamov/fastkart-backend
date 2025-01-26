@@ -6,7 +6,7 @@ from django_core.models import AbstractBaseModel
 class AddressModel(AbstractBaseModel):
     id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100)
-    user = models.ForeignKey('accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name="addresses")
+    user = models.ForeignKey('accounts.User', on_delete=models.SET_NULL, null=True, blank=True, related_name="address")
     street = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
     pincode = models.CharField(max_length=20)

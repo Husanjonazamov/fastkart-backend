@@ -12,6 +12,7 @@ class BaseReviewSerializer(serializers.ModelSerializer):
     review_image_id = serializers.IntegerField(required=False)
     consumer = UserSerializer(read_only=True)
     
+    
     class Meta:
         model = ReviewModel
         fields = [
