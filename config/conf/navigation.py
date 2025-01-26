@@ -82,6 +82,11 @@ PAGES = [
                 "icon": "favorite",  # Google Material Icons Favorite (Wishlist) icon
                 "link": reverse_lazy("admin:cart_wishlistmodel_changelist"),
             },
+            {
+                "title": _("WishlistItemModel"),
+                "icon": "favorite",  # Google Material Icons Favorite (Wishlist) icon
+                "link": reverse_lazy("admin:cart_wishlistitemmodel_changelist"),
+            },
         ],
     },
     {
