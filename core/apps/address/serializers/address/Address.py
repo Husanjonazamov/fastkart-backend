@@ -79,7 +79,5 @@ class CreateAddressSerializer(BaseAddressSerializer):
 
     def create(self, validated_data):
         request = self.context.get("request")
-        if not request or not request.user.is_authenticated:
-            raise serializers.ValidationError("Foydalanuvchi autentifikatsiya qilinmagan.")
         validated_data["user"] = request.user
         return super().create(validated_data)

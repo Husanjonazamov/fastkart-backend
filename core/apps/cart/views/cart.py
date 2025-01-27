@@ -3,14 +3,14 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from ..models import CartModel
 from ..serializers.cart import CreateCartSerializer, ListCartSerializer, RetrieveCartSerializer
 
 
 @extend_schema(tags=["Cart"])
-class CartView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class CartView(BaseViewSetMixin, ReadOnlyModelViewSet, ModelViewSet):
     queryset = CartModel.objects.all()
 
     def get_serializer_class(self) -> Any:

@@ -114,7 +114,7 @@ class CreateCartSerializer(BaseCartSerializer):
         quantity = validated_data.pop("quantity", 1)
         sub_total = product.sale_price * quantity
         
-        cart = Cart.objects.create(
+        cart = CartModel.objects.create(
             consumer=consumer,
             product=product,
             variation=variation,

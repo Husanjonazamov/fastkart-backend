@@ -86,5 +86,5 @@ class Pivot(models.Model):
     )
     model_type = models.CharField(max_length=255)
 
-    def __str__(self):
-        return f"{self.model_type} - {self.role.name}"
+    # def __str__(self):
+    #     return f"{self.model_type} - {self.role.name}"

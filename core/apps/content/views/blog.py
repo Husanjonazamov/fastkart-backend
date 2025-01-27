@@ -3,14 +3,14 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from ..models import BlogModel
 from ..serializers.blog import CreateBlogSerializer, ListBlogSerializer, RetrieveBlogSerializer
 
 
 @extend_schema(tags=["blog"])
-class BlogView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class BlogView(BaseViewSetMixin, ReadOnlyModelViewSet, ModelViewSet):
     queryset = BlogModel.objects.all()
 
     def get_serializer_class(self) -> Any:
