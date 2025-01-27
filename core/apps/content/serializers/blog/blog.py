@@ -15,13 +15,10 @@ class BaseBlogSerializer(serializers.ModelSerializer):
     blog_meta_image = ListImageSerializer(read_only=True)
     tags = ListTagsSerializer(many=True, read_only=True)
     categories = serializers.SerializerMethodField()
-    
+
     is_featured = serializers.SerializerMethodField()
     is_sticky = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
-    
-
-   
 
     class Meta:
         model = BlogModel
@@ -57,21 +54,19 @@ class BaseBlogSerializer(serializers.ModelSerializer):
             "updated_at",
             "deleted_at",
         ]
-        
+
     def get_categories(self, obj: BlogModel):
         from core.apps.product.serializers.category import ListCategorySerializer
         return ListCategorySerializer(obj.categories.all(), many=True).data
-    
 
     def get_is_featured(self, obj: BlogModel):
-            return 1 if obj.is_featured else 0
+        return int(obj.is_featured)
 
     def get_is_sticky(self, obj: BlogModel):
-        return 1 if obj.is_sticky else 0
+        return int(obj.is_sticky)
 
     def get_status(self, obj: BlogModel):
-        return 1 if obj.status else 0
-
+        return int(obj.status)
 
     def get_blog_thumbnail_id(self, obj: BlogModel) -> int | None:
         return obj.blog_thumbnail.id if obj.blog_thumbnail else None
@@ -81,11 +76,13 @@ class BaseBlogSerializer(serializers.ModelSerializer):
 
 
 class ListBlogSerializer(BaseBlogSerializer):
-    class Meta(BaseBlogSerializer.Meta): ...
+    class Meta(BaseBlogSerializer.Meta):
+        ...
 
 
 class RetrieveBlogSerializer(BaseBlogSerializer):
-    class Meta(BaseBlogSerializer.Meta): ...
+    class Meta(BaseBlogSerializer.Meta):
+        ...
 
 
 class CreateBlogSerializer(BaseBlogSerializer):
@@ -99,19 +96,17 @@ class CreateBlogSerializer(BaseBlogSerializer):
 
         if user.is_anonymous:
             raise serializers.ValidationError("Foydalanuvchi tizimga kirgan bo'lishi kerak.")
-        
-        validated_data['created_by'] = user 
 
-        blog = BlogModel.objects.create(**validated_data)
+        validated_data['created_by'] = user  
 
         tags_data = validated_data.pop('tags', [])
         categories_data = validated_data.pop('categories', [])
 
+        blog = BlogModel.objects.create(**validated_data)
+
         if tags_data:
             blog.tags.set(tags_data)
-
         if categories_data:
             blog.categories.set(categories_data)
 
         return blog
-
