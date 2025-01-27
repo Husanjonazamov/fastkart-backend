@@ -79,5 +79,32 @@ class CreateAddressSerializer(BaseAddressSerializer):
 
     def create(self, validated_data):
         request = self.context.get("request")
-        validated_data["user"] = request.user
+        
+        user_id = validated_data.get('user_id')
+        try:
+            user = User.objects.get(id=user_id)
+        except User.DoesNotExist:
+            raise serializers.ValidationError("User not found with the given id")
+        
+        validated_data["user"] = user
+
+        country_id = validated_data.get('country_id')
+        try:
+            country = CountryModel.objects.get(id=country_id)
+        except CountryModel.DoesNotExist:
+            raise serializers.ValidationError("Country not found with the given id")
+        
+        validated_data["country"] = country
+
+        state_id = validated_data.get('state_id')
+        try:
+            state = StateModel.objects.get(id=state_id)
+        except StateModel.DoesNotExist:
+            raise serializers.ValidationError("State not found with the given id")
+
+        if state.country != country:
+            raise serializers.ValidationError("State does not belong to the selected country.")
+        
+        validated_data["state"] = state
+
         return super().create(validated_data)

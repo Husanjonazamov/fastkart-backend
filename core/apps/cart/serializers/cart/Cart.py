@@ -5,7 +5,6 @@ from core.apps.product.serializers.variation import ListVariationSerializer
 from core.apps.product.models import ProductModel, VariationModel
 from core.apps.cart.models import CartModel
 
-
 class BaseCartSerializer(serializers.ModelSerializer):
     product_id = serializers.SerializerMethodField()
     variation_id = serializers.SerializerMethodField()
@@ -26,7 +25,7 @@ class BaseCartSerializer(serializers.ModelSerializer):
             "updated_at",
             "deleted_at",
             "product",
-            "variations",
+            "variation",
         ]
         read_only_fields = [
             "id",
@@ -79,10 +78,12 @@ class RetrieveCartSerializer(BaseCartSerializer):
             "variation",
         ]
 
+
 class CreateCartSerializer(BaseCartSerializer):
     product_id = serializers.IntegerField()
     variation_id = serializers.IntegerField(required=False)
     consumer_id = serializers.IntegerField()
+    quantity = serializers.IntegerField(default=1)
 
     class Meta(BaseCartSerializer.Meta):
         fields = [
@@ -92,34 +93,48 @@ class CreateCartSerializer(BaseCartSerializer):
             "quantity",
         ]
 
-    def create(self, validated_data):
-        try:
-            product = ProductModel.objects.get(id=validated_data.pop("product_id"))
-        except ProductModel.DoesNotExist:
+    def validate(self, attrs):
+        product_id = attrs.get("product_id")
+        variation_id = attrs.get("variation_id")
+        consumer_id = attrs.get("consumer_id")
+
+        product = ProductModel.objects.filter(id=product_id).first()
+        if not product:
             raise serializers.ValidationError({"product_id": "Product not found."})
-        
-        variation_id = validated_data.pop("variation_id", None)
+        attrs["product"] = product
+
         variation = None
         if variation_id:
-            try:
-                variation = VariationModel.objects.get(id=variation_id)
-            except VariationModel.DoesNotExist:
+            variation = VariationModel.objects.filter(id=variation_id).first()
+            if not variation:
                 raise serializers.ValidationError({"variation_id": "Variation not found."})
-        
-        try:
-            consumer = User.objects.get(id=validated_data.pop("consumer_id"))
-        except User.DoesNotExist:
+        attrs["variation"] = variation
+
+        consumer = User.objects.filter(id=consumer_id).first()
+        if not consumer:
             raise serializers.ValidationError({"consumer_id": "Consumer not found."})
-        
+        attrs["consumer"] = consumer
+
+        quantity = attrs.get("quantity", 1)
+        if quantity < 1:
+            raise serializers.ValidationError({"quantity": "Quantity must be at least 1."})
+
+        return attrs
+
+    def create(self, validated_data):
+        product = validated_data.pop("product")
+        variation = validated_data.pop("variation", None)
+        consumer = validated_data.pop("consumer")
         quantity = validated_data.pop("quantity", 1)
+
         sub_total = product.sale_price * quantity
-        
+
         cart = CartModel.objects.create(
-            consumer=consumer,
             product=product,
             variation=variation,
-            sub_total=sub_total,
+            consumer=consumer,
             quantity=quantity,
+            sub_total=sub_total,
         )
         return cart
 

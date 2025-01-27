@@ -87,9 +87,11 @@ class RetrieveBlogSerializer(BaseBlogSerializer):
 
 class CreateBlogSerializer(BaseBlogSerializer):
     created_by_id = serializers.IntegerField(write_only=True)
+    tags_ids = serializers.ListField(child=serializers.IntegerField(), required=False)
+    categories_ids = serializers.ListField(child=serializers.IntegerField(), required=False)
 
     class Meta(BaseBlogSerializer.Meta):
-        fields = BaseBlogSerializer.Meta.fields + ["created_by_id"]
+        fields = BaseBlogSerializer.Meta.fields + ["created_by_id", "tags_ids", "categories_ids"]
 
     def create(self, validated_data):
         user = self.context['request'].user
@@ -99,14 +101,17 @@ class CreateBlogSerializer(BaseBlogSerializer):
 
         validated_data['created_by'] = user  
 
-        tags_data = validated_data.pop('tags', [])
-        categories_data = validated_data.pop('categories', [])
+        tags_ids = validated_data.pop('tags_ids', [])
+        categories_ids = validated_data.pop('categories_ids', [])
 
         blog = BlogModel.objects.create(**validated_data)
 
-        if tags_data:
-            blog.tags.set(tags_data)
-        if categories_data:
-            blog.categories.set(categories_data)
+        if tags_ids:
+            tags = ListTagsSerializer.Meta.model.objects.filter(id__in=tags_ids)
+            blog.tags.set(tags)
+        if categories_ids:
+            from core.apps.product.models import CategoryModel
+            categories = CategoryModel.objects.filter(id__in=categories_ids)
+            blog.categories.set(categories)
 
         return blog

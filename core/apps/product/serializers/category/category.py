@@ -61,16 +61,25 @@ class RetrieveCategorySerializer(BaseCategorySerializer):
 
 
 
-class CreateCategorySerializer(BaseCategorySerializer):
+class CreateCategorySerializer(serializers.ModelSerializer):
     parent_id = serializers.IntegerField(required=False)
-    category_image = ListImageSerializer(required=False)
-    category_icon = ListImageSerializer(required=False)
+    category_image_id = serializers.IntegerField(required=False)
+    category_icon_id = serializers.IntegerField(required=False)
 
-    class Meta(BaseCategorySerializer.Meta):
-        pass
+    class Meta:
+        model = CategoryModel
+        fields = [
+            "name",
+            "description",
+            "status",
+            "type",
+            "commission_rate",
+            "parent_id",
+            "category_image_id",
+            "category_icon_id",
+        ]
 
     def validate(self, attrs):
-        """Custom validation if needed."""
         parent_id = attrs.get('parent_id')
         if parent_id:
             try:
@@ -78,23 +87,29 @@ class CreateCategorySerializer(BaseCategorySerializer):
                 attrs['parent'] = parent_category
             except CategoryModel.DoesNotExist:
                 raise serializers.ValidationError("Parent category does not exist.")
+        
+        category_image_id = attrs.get('category_image_id')
+        if category_image_id:
+            try:
+                category_image = ImageModel.objects.get(id=category_image_id)
+                attrs['category_image'] = category_image
+            except ImageModel.DoesNotExist:
+                raise serializers.ValidationError("Category image does not exist.")
+        
+        category_icon_id = attrs.get('category_icon_id')
+        if category_icon_id:
+            try:
+                category_icon = ImageModel.objects.get(id=category_icon_id)
+                attrs['category_icon'] = category_icon
+            except ImageModel.DoesNotExist:
+                raise serializers.ValidationError("Category icon does not exist.")
+
         return attrs
 
     def create(self, validated_data):
-        category_image = validated_data.pop('category_image', None)
-        category_icon = validated_data.pop('category_icon', None)
-        
-        request = self.context.get('request')
-        if not request or not request.user:
-            raise serializers.ValidationError("User is not authenticated.")
-
-        category = CategoryModel.objects.create(created_by=request.user, **validated_data)
-
-        if category_image:
-            category.category_image = ImageModel.objects.create(**category_image)
-        
-        if category_icon:
-            category.category_icon = ImageModel.objects.create(**category_icon)
-
+        category = CategoryModel.objects.create(
+            created_by=self.context['request'].user, 
+            **validated_data
+        )
         category.save()
         return category

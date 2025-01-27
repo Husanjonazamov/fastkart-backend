@@ -37,15 +37,19 @@ class RetrieveAttributeSerializer(BaseAttributeSerializer):
     class Meta(BaseAttributeSerializer.Meta):
         fields = BaseAttributeSerializer.Meta.fields
 
-
 class CreateAttributeSerializer(BaseAttributeSerializer):
+    # Instead of receiving full attribute value data, we receive a list of ids
+    attribute_values_ids = serializers.ListField(
+        child=serializers.IntegerField(), required=False
+    )
+
     class Meta(BaseAttributeSerializer.Meta):
         fields = [
             "name",
             "style",
             "slug",
             "status",
-            "attribute_values",
+            "attribute_values_ids",  # We will now use the ids for the attribute values
         ]
 
     def create(self, validated_data):
@@ -55,33 +59,39 @@ class CreateAttributeSerializer(BaseAttributeSerializer):
         if not created_by:
             raise serializers.ValidationError("User must be authenticated.")
 
-        attribute_values = validated_data.pop("attribute_values", [])
+        attribute_values_ids = validated_data.pop("attribute_values_ids", [])
 
-        if not isinstance(attribute_values, list):
+        if not isinstance(attribute_values_ids, list):
             raise serializers.ValidationError(
-                "'attribute_values' must be a list of attribute values."
+                "'attribute_values_ids' must be a list of attribute value IDs."
             )
 
         with transaction.atomic():
+            # Create the main attribute model
             attribute = AttributeModel.objects.create(
                 created_by=created_by, **validated_data
             )
 
-            values = []
-            for value_data in attribute_values:
-                slug = value_data.get("slug")
+            # If attribute_values_ids is provided, link the attribute value instances
+            if attribute_values_ids:
+                # Fetch AttributevalueModel objects based on ids
+                values = []
+                for value_id in attribute_values_ids:
+                    try:
+                        attribute_value = AttributevalueModel.objects.get(id=value_id)
+                    except AttributevalueModel.DoesNotExist:
+                        raise serializers.ValidationError(
+                            f"Attribute value with ID {value_id} does not exist."
+                        )
+                    
+                    # Add a link between the created attribute and the existing attribute value
+                    attribute_value.attribute = attribute
+                    attribute_value.save()
 
-                if AttributevalueModel.objects.filter(slug=slug).exists():
-                    raise serializers.ValidationError(f"\"{slug}\" AttributevalueModel already exists.")
-
-                values.append(
-                    AttributevalueModel(attribute=attribute, created_by=created_by, **value_data)
-                )
-
-            AttributevalueModel.objects.bulk_create(values)
+                return attribute
 
         return attribute
-
+    
 class UpdateAttributeSerializer(BaseAttributeSerializer):
     class Meta(BaseAttributeSerializer.Meta):
         fields = [

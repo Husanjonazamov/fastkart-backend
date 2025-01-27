@@ -3,14 +3,14 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from ..models import AddressModel
 from ..serializers.address import CreateAddressSerializer, ListAddressSerializer, RetrieveAddressSerializer
 
 
 @extend_schema(tags=["Address"])
-class AddressView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class AddressView(BaseViewSetMixin, ReadOnlyModelViewSet, ModelViewSet):
     queryset = AddressModel.objects.all()
 
     def get_serializer_class(self) -> Any:
