@@ -9,6 +9,8 @@ class BaseCategorySerializer(serializers.ModelSerializer):
     category_image = ListImageSerializer()
     category_icon = ListImageSerializer()
     subcategories = serializers.SerializerMethodField()
+    
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = CategoryModel
@@ -39,6 +41,9 @@ class BaseCategorySerializer(serializers.ModelSerializer):
 
     def get_parent_id(self, obj):
         return obj.parent.id if obj.parent else None
+
+    def get_status(self, obj):
+        return 1 if obj.status else 0
 
     def get_subcategories(self, obj):
         subcategories = obj.children.exclude(id=obj.pk)
