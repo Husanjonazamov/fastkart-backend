@@ -3,7 +3,7 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from ..models import OrderModel, OrderstatusModel
 from ..serializers.order import (
@@ -17,7 +17,7 @@ from ..serializers.order import (
 
 
 @extend_schema(tags=["OrderStatus"])
-class OrderstatusView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class OrderstatusView(BaseViewSetMixin, ReadOnlyModelViewSet, ModelViewSet):
     queryset = OrderstatusModel.objects.all()
 
     def get_serializer_class(self) -> Any:
@@ -41,7 +41,7 @@ class OrderstatusView(BaseViewSetMixin, ReadOnlyModelViewSet):
 
 
 @extend_schema(tags=["Order"])
-class OrderView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class OrderView(BaseViewSetMixin, ReadOnlyModelViewSet, ModelViewSet):
     queryset = OrderModel.objects.all()
 
     def get_serializer_class(self) -> Any:
