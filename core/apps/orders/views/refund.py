@@ -3,14 +3,14 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from ..models import RefundModel
 from ..serializers.refund import CreateRefundSerializer, ListRefundSerializer, RetrieveRefundSerializer
 
 
 @extend_schema(tags=["Refund"])
-class RefundView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class RefundView(BaseViewSetMixin, ModelViewSet):
     queryset = RefundModel.objects.all()
 
     def get_serializer_class(self) -> Any:

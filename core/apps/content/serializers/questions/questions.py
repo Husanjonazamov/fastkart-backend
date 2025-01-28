@@ -3,6 +3,7 @@ from rest_framework import serializers
 from ...models import QuestionsModel
 from core.apps.accounts.models.user import User
 from core.apps.product.models.product import ProductModel
+from rest_framework.exceptions import NotFound
 
 
 class BaseQuestionsSerializer(serializers.ModelSerializer):
@@ -36,7 +37,6 @@ class RetrieveQuestionsSerializer(BaseQuestionsSerializer):
     class Meta(BaseQuestionsSerializer.Meta): ...
 
 
-from rest_framework.exceptions import NotFound
 
 class CreateQuestionsSerializer(BaseQuestionsSerializer):
     consumer_id = serializers.IntegerField(write_only=True, required=False)
