@@ -3,14 +3,14 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from ..models import StoreModel
 from ..serializers.store import CreateStoreSerializer, ListStoreSerializer, RetrieveStoreSerializer
 
 
 @extend_schema(tags=["store"])
-class StoreView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class StoreView(BaseViewSetMixin, ReadOnlyModelViewSet, ModelViewSet):
     queryset = StoreModel.objects.all()
 
     def get_serializer_class(self) -> Any:
