@@ -4,6 +4,10 @@ from ...models import ReviewModel
 from core.apps.accounts.serializers.user import UserSerializer
 from core.apps.product.models.product import ProductModel
 from core.apps.accounts.models.user import User
+from core.apps.content.models import ImageModel
+
+
+
 
 class BaseReviewSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField(required=False)
@@ -64,4 +68,41 @@ class RetrieveReviewSerializer(BaseReviewSerializer):
 
 
 class CreateReviewSerializer(BaseReviewSerializer):
-    class Meta(BaseReviewSerializer.Meta): ...
+    class Meta(BaseReviewSerializer.Meta):
+        pass
+
+    def create(self, validated_data):
+        product_id = validated_data.get("product_id")
+        consumer_id = validated_data.get("consumer_id")
+        review_image_id = validated_data.get("review_image_id")
+        rating = validated_data.get("rating")
+        description = validated_data.get("description")
+
+        try:
+            product = ProductModel.objects.get(id=product_id)
+        except ProductModel.DoesNotExist:
+            raise serializers.ValidationError({"product_id": "Product not found."})
+
+        try:
+            consumer = User.objects.get(id=consumer_id)
+        except User.DoesNotExist:
+            raise serializers.ValidationError({"consumer_id": "Consumer not found."})
+
+        review = ReviewModel.objects.create(
+            product=product,
+            consumer=consumer,
+            rating=rating,
+            description=description
+        )
+
+        if review_image_id:
+            try:
+                review_image = ImageModel.objects.get(id=review_image_id)
+                review.review_image = review_image
+                review.save()
+            except ImageModel.DoesNotExist:
+                raise serializers.ValidationError({"review_image_id": "Review image not found."})
+
+        return review
+
+
