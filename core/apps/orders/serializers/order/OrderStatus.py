@@ -7,7 +7,7 @@ from ...models import OrderstatusModel
 
 
 class BaseOrderstatusSerializer(serializers.ModelSerializer):
-    sequence = serializers.SerializerMethodField()
+    sequence = serializers.CharField(required=False)
     created_by_id = serializers.SerializerMethodField()
     status = serializers.SerializerMethodField()
     system_reserve = serializers.SerializerMethodField()
@@ -49,4 +49,19 @@ class RetrieveOrderstatusSerializer(BaseOrderstatusSerializer):
 
 
 class CreateOrderstatusSerializer(BaseOrderstatusSerializer):
-    class Meta(BaseOrderstatusSerializer.Meta): ...
+    class Meta(BaseOrderstatusSerializer.Meta):
+        fields = BaseOrderstatusSerializer.Meta.fields
+
+    def validate(self, data):
+        if 'sequence' in data:
+            try:
+                data['sequence'] = int(data['sequence'])  
+            except ValueError:
+                raise serializers.ValidationError("Sequence must be a valid integer.")
+        
+        if 'created_by_id' in data and data['created_by_id'] == "None":
+            data['created_by_id'] = None 
+        return data
+
+    def create(self, validated_data):
+        return OrderstatusModel.objects.create(**validated_data)

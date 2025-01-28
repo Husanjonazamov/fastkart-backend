@@ -1,0 +1,22 @@
+{
+    "consumer_id": 1,
+    "tax_total": 3.00,
+    "shipping_total": 332.00,
+    "points_amount": 323232.00,
+    "wallet_balance": 3.00,
+    "amount": 4.00,
+    "total": 336.00,
+    "coupon_total_discount": 0.00,
+    "payment_method": "paypal",
+    "payment_status": "completed",
+    "store_id": 1,
+    "billing_address_id": 1,
+    "shipping_address_id": 1,
+    "delivery_description": "323",
+    "delivery_interval": "323",
+    "coupon_id": 1,
+    "parent_id": null,
+    "created_by_id": 1,
+    "status": true
+  }
+  
