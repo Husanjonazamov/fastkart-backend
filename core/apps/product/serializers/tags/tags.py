@@ -46,4 +46,14 @@ class RetrieveTagsSerializer(BaseTagsSerializer):
 
 
 class CreateTagsSerializer(BaseTagsSerializer):
-    class Meta(BaseTagsSerializer.Meta): ...
+    class Meta(BaseTagsSerializer.Meta):
+        fields = BaseTagsSerializer.Meta.fields    
+    
+    def create(self, validated_data):
+        user = self.context.get('request').user 
+        validated_data['created_by'] = user 
+
+        tag = TagsModel.objects.create(**validated_data)
+        
+        return tag
+

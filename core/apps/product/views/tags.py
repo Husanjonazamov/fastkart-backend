@@ -3,14 +3,14 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from ..models import TagsModel
 from ..serializers.tags import CreateTagsSerializer, ListTagsSerializer, RetrieveTagsSerializer
 
 
 @extend_schema(tags=["tags"])
-class TagsView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class TagsView(BaseViewSetMixin, ModelViewSet):
     queryset = TagsModel.objects.all()
 
     def get_serializer_class(self) -> Any:
