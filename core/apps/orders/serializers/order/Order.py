@@ -135,7 +135,6 @@ class CreateOrderSerializer(BaseOrderSerializer):
             raise serializers.ValidationError({"order_status_id": "Invalid order status."})
 
         order = OrderModel.objects.create(order_status=order_status, **validated_data)
-        raise Exception(validated_data)
         if products_data:
             products = ProductModel.objects.filter(id__in=products_data)
             order.products.set(products) 

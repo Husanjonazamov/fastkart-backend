@@ -3,7 +3,7 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 
 from ..models import PaymentaccountModel
 from ..serializers.paymentAccount import (
@@ -14,7 +14,7 @@ from ..serializers.paymentAccount import (
 
 
 @extend_schema(tags=["paymentAccount"])
-class PaymentaccountView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class PaymentaccountView(BaseViewSetMixin, ModelViewSet):
     queryset = PaymentaccountModel.objects.all()
 
     def get_serializer_class(self) -> Any:
