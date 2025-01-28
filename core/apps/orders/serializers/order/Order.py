@@ -18,7 +18,7 @@ class BaseOrderSerializer(serializers.ModelSerializer):
     store = ListStateSerializer(read_only=True)
     consumer = UserSerializer(read_only=True)
     sub_orders = serializers.SerializerMethodField()
-    
+
     consumer_id = serializers.IntegerField(required=False)
     store_id = serializers.IntegerField(required=False)
     coupon_id = serializers.IntegerField(required=False)
@@ -31,7 +31,7 @@ class BaseOrderSerializer(serializers.ModelSerializer):
     created_by_id = serializers.IntegerField(required=False)
     billing_address_id = serializers.IntegerField(required=False)
     shipping_address_id = serializers.IntegerField(required=False)
-    
+
     class Meta:
         model = OrderModel
         fields = [
@@ -87,10 +87,10 @@ class BaseOrderSerializer(serializers.ModelSerializer):
             "billing_address",
             "shipping_address",
         ]
-        
+
     def get_parent_id(self, obj):
         return obj.parent_id if obj.parent_id else None
-    
+
     def get_sub_orders(self, obj):
         suborders = obj.sub_orders.exclude(id=obj.pk)  
         if suborders.exists():
@@ -106,56 +106,41 @@ class RetrieveOrderSerializer(BaseOrderSerializer):
     class Meta(BaseOrderSerializer.Meta): ...
 
 
-
-
-
-
-
-class CreateOrderSerializer(serializers.ModelSerializer):
+class CreateOrderSerializer(BaseOrderSerializer):
     products = serializers.ListField(
         child=serializers.IntegerField(), required=False, default=[]
-    )  
-    order_status_id = serializers.IntegerField(required=False)
+    )
+    order_status_id = serializers.IntegerField(required=True)
     billing_address_id = serializers.IntegerField(required=False)
     shipping_address_id = serializers.IntegerField(required=False)
-    parent_id = serializers.PrimaryKeyRelatedField(queryset=OrderModel.objects.all(), required=False, allow_null=True)
+    parent_id = serializers.PrimaryKeyRelatedField(
+        queryset=OrderModel.objects.all(),
+        required=False,
+        allow_null=True
+    )
 
-    class Meta:
-        model = OrderModel
-        fields = [
-            "id",
-            "order_number",
-            "consumer_id",
-            "store_id",
-            "billing_address_id",
-            "shipping_address_id",
-            "order_status_id",
-            "coupon_id",
-            "parent_id",
-            "products",
-            "created_by_id",
-            "invoice_url",
-            "status",
-            "delivered_at",
-        ]
-    
+    class Meta(BaseOrderSerializer.Meta):
+        fields = BaseOrderSerializer.Meta.fields
+
     def create(self, validated_data):
         products_data = validated_data.pop("products", [])
         order_status_id = validated_data.pop("order_status_id", None)
-        billing_address_id = validated_data.pop("billing_address_id", None)
-        shipping_address_id = validated_data.pop("shipping_address_id", None)
-        
+
+        if order_status_id is None:
+            raise serializers.ValidationError({"order_status_id": "Order status is required."})
+
         try:
             order_status = OrderstatusModel.objects.get(pk=order_status_id)
         except OrderstatusModel.DoesNotExist:
             raise serializers.ValidationError({"order_status_id": "Invalid order status."})
-        
-        order = OrderModel.objects.create(order_status=order_status, **validated_data)
 
+        order = OrderModel.objects.create(order_status=order_status, **validated_data)
+        raise Exception(order)
         if products_data:
             products = ProductModel.objects.filter(id__in=products_data)
-            order.products.add(*products)  
+            order.products.set(products) 
 
+        billing_address_id = validated_data.pop("billing_address_id", None)
         if billing_address_id:
             try:
                 billing_address = AddressModel.objects.get(id=billing_address_id)
@@ -163,17 +148,21 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             except AddressModel.DoesNotExist:
                 raise serializers.ValidationError({"billing_address_id": "Invalid billing address."})
 
+        shipping_address_id = validated_data.pop("shipping_address_id", None)
         if shipping_address_id:
             try:
                 shipping_address = AddressModel.objects.get(id=shipping_address_id)
                 order.shipping_address = shipping_address
             except AddressModel.DoesNotExist:
                 raise serializers.ValidationError({"shipping_address_id": "Invalid shipping address."})
-        
+
+        parent_id = validated_data.pop("parent_id", None)
+        if parent_id:
+            try:
+                parent_order = OrderModel.objects.get(id=parent_id)
+                order.parent_id = parent_order
+            except OrderModel.DoesNotExist:
+                raise serializers.ValidationError({"parent_id": "Invalid parent order ID."})
+
         order.save()
         return order
-
-
-
-
-

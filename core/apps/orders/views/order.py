@@ -41,24 +41,22 @@ class OrderstatusView(BaseViewSetMixin, ReadOnlyModelViewSet, ModelViewSet):
 
 
 @extend_schema(tags=["Order"])
-class OrderView(BaseViewSetMixin, ReadOnlyModelViewSet, ModelViewSet):
+class OrderView(BaseViewSetMixin, ModelViewSet):  
     queryset = OrderModel.objects.all()
 
     def get_serializer_class(self) -> Any:
-        match self.action:
-            case "list":
-                return ListOrderSerializer
-            case "retrieve":
-                return RetrieveOrderSerializer
-            case "create":
-                return CreateOrderSerializer
-            case _:
-                return ListOrderSerializer
+        if self.action == "list":
+            return ListOrderSerializer
+        elif self.action == "retrieve":
+            return RetrieveOrderSerializer
+        elif self.action == "create":
+            return CreateOrderSerializer
+        else:
+            return ListOrderSerializer
 
     def get_permissions(self) -> Any:
-        perms = []
-        match self.action:
-            case _:
-                perms.extend([AllowAny])
-        self.permission_classes = perms
+        if self.action in ["create", "update", "delete"]:
+            self.permission_classes = [AllowAny]  
+        else:
+            self.permission_classes = [AllowAny]
         return super().get_permissions()
