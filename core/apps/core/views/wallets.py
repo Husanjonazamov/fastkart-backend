@@ -3,14 +3,14 @@ from typing import Any
 from django_core.mixins import BaseViewSetMixin
 from drf_spectacular.utils import extend_schema
 from rest_framework.permissions import AllowAny
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from ..models import WalletsModel
 from ..serializers.wallets import CreateWalletsSerializer, ListWalletsSerializer, RetrieveWalletsSerializer
 
 
 @extend_schema(tags=["wallets"])
-class WalletsView(BaseViewSetMixin, ReadOnlyModelViewSet):
+class WalletsView(BaseViewSetMixin, ModelViewSet):
     queryset = WalletsModel.objects.all()
 
     def get_serializer_class(self) -> Any:

@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 # views
 from core.apps.address.views import AddressView, CountryView, StateView
-from core.apps.cart.views import CartView, CouponView, WishlistView, PointsView
+from core.apps.cart.views import CartView, CouponView, WishlistView, PointsView, WishlistItemView
 from core.apps.content.views import BlogView, FaqView, NotificationView, QuestionsView, ImageView
 from core.apps.core.views import TransactionView, WalletsView
 from core.apps.orders.views import OrderstatusView, OrderView, RefundView
@@ -32,6 +32,7 @@ router.register(r'state', StateView, basename='state')
 # cart views
 router.register(r'cart', CartView, basename='cart')
 router.register(r'wishlist', WishlistView, basename='wishlist')
+router.register(r'wishlist_item', WishlistItemView, basename='wishlist_item')
 router.register(r'coupon', CouponView, basename='coupon')
 router.register(r'points', PointsView, basename='points')
 
