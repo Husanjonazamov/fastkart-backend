@@ -1,14 +1,21 @@
 from rest_framework import serializers
 
 from ...models import WalletsModel
+from ..transaction import ListTransactionSerializer
 
 
 class BaseWalletsSerializer(serializers.ModelSerializer):
+    consumer_id = serializers.IntegerField(source='consumer.id', read_only=True)
+    transactions = ListTransactionSerializer(many=True, read_only=True)
+    
     class Meta:
         model = WalletsModel
-        exclude = [
-            "created_at",
-            "updated_at",
+        fields = [
+            'id',
+            'consumer_id',
+            'type',
+            'balance',
+            'transactions'
         ]
 
 
