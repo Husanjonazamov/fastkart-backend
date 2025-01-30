@@ -67,20 +67,16 @@ class CreateWishlistItemSerializer(BaseWishlistItemSerializer):
 
     def create(self, validated_data):
         product_id = validated_data.get("product")  
-        wishlist_instance = validated_data.get("wishlist")  # Bu obyekt, ID emas!
-
+        wishlist_instance = validated_data.get("wishlist")  
         if isinstance(wishlist_instance, WishlistModel):  
-            wishlist_id = wishlist_instance.id  # Agar obyekt bo‘lsa, ID sini olamiz
+            wishlist_id = wishlist_instance.id  
         else:
-            wishlist_id = wishlist_instance  # Agar ID bo‘lsa, o‘zini saqlaymiz
+            wishlist_id = wishlist_instance 
 
-        # Productni tekshiramiz
         product_instance = ProductModel.objects.get(id=product_id)
 
-        # Wishlistni tekshiramiz
         wishlist_instance = WishlistModel.objects.get(id=wishlist_id)
 
-        # Wishlist item yaratamiz
         wishlist_item = WishlistitemModel.objects.create(
             product=product_instance,
             wishlist=wishlist_instance
