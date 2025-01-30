@@ -66,6 +66,7 @@ class OrderView(BaseViewSetMixin, ModelViewSet):
             self.permission_classes = [AllowAny]
         return super().get_permissions()
 
+
     def perform_create(self, serializer):
         order = serializer.save()
 
