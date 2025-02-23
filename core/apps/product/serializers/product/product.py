@@ -54,6 +54,7 @@ class BaseProductSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "slug",
             "short_description",
             "description",
             "type",
@@ -88,7 +89,6 @@ class BaseProductSerializer(serializers.ModelSerializer):
             "social_share",
             "encourage_order",
             "encourage_view",
-            "slug",
             "status",
             "store_id",
             "created_by_id",

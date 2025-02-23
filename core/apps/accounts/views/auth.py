@@ -31,6 +31,7 @@ from ..serializers import ChangePasswordSerializer
 from .. import models
 
 
+
 @extend_schema(tags=["register"])
 class RegisterView(BaseViewSetMixin, GenericViewSet, UserService):
     throttle_classes = [throttling.UserRateThrottle]
@@ -53,9 +54,8 @@ class RegisterView(BaseViewSetMixin, GenericViewSet, UserService):
         ser.is_valid(raise_exception=True)
         data = ser.data
         phone = data.get("phone")
-        # Create pending user
         self.create_user(phone, data.get("first_name"), data.get("last_name"), data.get("password"))
-        self.send_confirmation(phone)  # Send confirmation code for sms eskiz.uz
+        self.send_confirmation(phone)  
         return Response(
             {"detail": _("Sms %(phone)s raqamiga yuborildi") % {"phone": phone}},
             status=status.HTTP_202_ACCEPTED,
@@ -106,6 +106,7 @@ class ResetPasswordView(BaseViewSetMixin, GenericViewSet, UserService):
                 return SetPasswordSerializer
             case _:
                 return None
+            
 
     @action(methods=["POST"], detail=False, url_path="reset-password")
     def reset_password(self, request):
@@ -180,6 +181,9 @@ class MeView(BaseViewSetMixin, GenericViewSet, UserService):
         ser.is_valid(raise_exception=True)
         ser.save()
         return Response({"detail": _("Malumotlar yangilandi")})
+
+
+
 
 
 @extend_schema(tags=["change-password"], description="Parolni o'zgartirish uchun")

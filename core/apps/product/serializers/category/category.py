@@ -17,6 +17,7 @@ class BaseCategorySerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
+            "slug",
             "description",
             "status",
             "type",
@@ -70,6 +71,7 @@ class CreateCategorySerializer(serializers.ModelSerializer):
         model = CategoryModel
         fields = [
             "name",
+            "slug",
             "description",
             "status",
             "type",
